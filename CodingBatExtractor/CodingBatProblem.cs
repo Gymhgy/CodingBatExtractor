@@ -28,11 +28,11 @@ import java.util.stream.*;
 
 public class {ProblemName[0].ToString().ToUpper() + ProblemName.Substring(1)} {{
 
-    /**
-     * {Description}
-     * Problem Source: {Link}
-     */
-    {Implementation}
+  /**
+   * {Description}
+   * Problem Source: {Link}
+   */
+  {Implementation.Replace("\n", "\n  ")}
 
 }}";
         }
