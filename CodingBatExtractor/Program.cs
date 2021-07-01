@@ -28,9 +28,7 @@ namespace CodingBatExtractor {
             });
 
             var login = client.PostAsync("/login", content).Result;
-            foreach (var cookie in cookieContainer.GetCookies(new Uri(codingbat))) {
-                Console.WriteLine(cookie.ToString()); // test=testValue
-            }
+
             //Parse
             var doneHtml = client.GetStringAsync("/done").Result;
             var doc = new HtmlDocument();
@@ -53,12 +51,12 @@ namespace CodingBatExtractor {
             //Process
             parsed.ForEach(prob => {
                 var formatted = prob.Format();
-                var path = Path.Combine(filepath, prob.ProblemGroup);
+                var path = Path.Combine(filepath, "java", prob.ProblemGroup);
                 //Create directory doesn't do anything if directory already exists
                 //So don't need to check
                 Directory.CreateDirectory(path);
 
-                using (FileStream fs = File.Create(Path.Combine(path, prob.ProblemName))) {
+                using (FileStream fs = File.Create(Path.Combine(path, prob.ProblemName + ".java"))) {
                     byte[] bytes = new UTF8Encoding().GetBytes(formatted);
                     fs.Write(bytes, 0, bytes.Length);
                 }
