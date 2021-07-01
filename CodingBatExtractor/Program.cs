@@ -45,18 +45,19 @@ namespace CodingBatExtractor {
                     problemGroup: innertext[0],
                     problemName: innertext[1],
                     description: probDoc.DocumentNode.SelectSingleNode("//p[@class='max2']").InnerText,
-                    implementation: probDoc.DocumentNode.SelectSingleNode("//div[@id='ace_div']").InnerText);
+                    implementation: probDoc.DocumentNode.SelectSingleNode("//div[@id='ace_div']").InnerText,
+                    language: prob.NextSibling.InnerText.Contains("python") ? Language.Python : Language.Java);
             }).ToList();
 
             //Process
             parsed.ForEach(prob => {
                 var formatted = prob.Format();
-                var path = Path.Combine(filepath, "java", prob.ProblemGroup);
+                var path = Path.Combine(filepath, prob.Language == Language.Java ? "java" : "python", prob.ProblemGroup);
                 //Create directory doesn't do anything if directory already exists
                 //So don't need to check
                 Directory.CreateDirectory(path);
 
-                using (FileStream fs = File.Create(Path.Combine(path, prob.ProblemName + ".java"))) {
+                using (FileStream fs = File.Create(Path.Combine(path, prob.ProblemName + (prob.Language == Language.Java ? ".java" : ".py")))) {
                     byte[] bytes = new UTF8Encoding().GetBytes(formatted);
                     fs.Write(bytes, 0, bytes.Length);
                 }
